@@ -9,8 +9,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.FileProviders;
 
 using CdnService.Configuration;
+using CdnService.Domain;
+using CdnService.Infrastructure;
 
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +36,11 @@ var uploadsPath = Path.IsPathRooted(storageOptions.BasePath)
     : Path.Combine(builder.Environment.ContentRootPath, storageOptions.BasePath);
 
 Directory.CreateDirectory(uploadsPath);
+
+// -------------------------------------------------------
+// Services
+// -------------------------------------------------------
+builder.Services.AddSingleton<IAssetStore, LocalAssetStore>();
 
 // -------------------------------------------------------
 // Authentication (JWT Bearer)
@@ -77,7 +86,12 @@ builder.Services.AddMassTransit(x =>
 // -------------------------------------------------------
 // API / Swagger
 // -------------------------------------------------------
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
