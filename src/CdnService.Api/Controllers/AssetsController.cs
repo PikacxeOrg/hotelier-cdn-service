@@ -157,11 +157,14 @@ public class AssetsController(
         var deleted = await store.DeleteAsync(assetId, ct);
         if (deleted is null) return NotFound();
 
+        var url = $"{Request.Scheme}://{Request.Host}/assets/{deleted.AssetId}";
+
         await publisher.Publish(new CdnAssetDeleted
         {
             AssetId = deleted.AssetId,
             OwnerId = deleted.OwnerId,
-            EntityId = deleted.EntityId
+            EntityId = deleted.EntityId,
+            Url = url
         }, ct);
 
         logger.LogInformation("Asset {AssetId} deleted by {OwnerId}", assetId, ownerId);
