@@ -56,7 +56,9 @@ public class AssetsController(
             await using var stream = file.OpenReadStream();
             var asset = await store.SaveAsync(stream, file.FileName, file.ContentType, ownerId.Value, entityId, ct);
 
-            var url = $"{Request.Scheme}://{Request.Host}/assets/{asset.AssetId}";
+            // Use the public-facing /api/cdn/ path so browsers can load images
+            // through the ingress without needing direct pod access.
+            var url = $"{Request.Scheme}://{Request.Host}/api/cdn/{asset.AssetId}";
 
             await publisher.Publish(new CdnAssetProcessed
             {
@@ -157,7 +159,7 @@ public class AssetsController(
         var deleted = await store.DeleteAsync(assetId, ct);
         if (deleted is null) return NotFound();
 
-        var url = $"{Request.Scheme}://{Request.Host}/assets/{deleted.AssetId}";
+        var url = $"{Request.Scheme}://{Request.Host}/api/cdn/{deleted.AssetId}";
 
         await publisher.Publish(new CdnAssetDeleted
         {
