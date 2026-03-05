@@ -123,11 +123,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Serve uploaded files as static content at /api/cdn
+// Serve uploaded files as static content
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/api/cdn"
+    RequestPath = "/assets"
 });
 
 app.UseAuthentication();
