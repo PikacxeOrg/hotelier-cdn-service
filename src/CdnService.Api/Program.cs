@@ -108,8 +108,6 @@ builder.Services.AddOpenTelemetry()
         .AddMeter("System.Net.NameResolution")
         .AddRuntimeInstrumentation()
         .AddProcessInstrumentation()
-        .AddRuntimeInstrumentation()
-        .AddProcessInstrumentation()
         .AddPrometheusExporter())
     .WithTracing(tracing => tracing
         .AddAspNetCoreInstrumentation()
@@ -125,7 +123,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Serve uploaded files as static content at /assets
+// Serve uploaded files as static content
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),
