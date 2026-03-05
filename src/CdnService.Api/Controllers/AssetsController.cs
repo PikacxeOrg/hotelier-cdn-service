@@ -15,7 +15,7 @@ namespace CdnService.Api;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/cdn")]
 public class AssetsController(
     IAssetStore store,
     IOptions<StorageOptions> storageOptions,
