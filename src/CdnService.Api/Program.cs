@@ -108,8 +108,6 @@ builder.Services.AddOpenTelemetry()
         .AddMeter("System.Net.NameResolution")
         .AddRuntimeInstrumentation()
         .AddProcessInstrumentation()
-        .AddRuntimeInstrumentation()
-        .AddProcessInstrumentation()
         .AddPrometheusExporter())
     .WithTracing(tracing => tracing
         .AddAspNetCoreInstrumentation()
