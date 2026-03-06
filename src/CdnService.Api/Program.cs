@@ -127,7 +127,7 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/assets"
+    RequestPath = "/cdn-assets"
 });
 
 app.UseAuthentication();
